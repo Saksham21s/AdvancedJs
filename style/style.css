@@ -80,7 +80,7 @@ body {
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   padding: 30px;
-  margin: 20px;
+  margin: 20px auto;
   flex: 1;
 }
 
@@ -89,9 +89,11 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 40px;
+  flex-wrap: wrap;
+  text-align: center;
 }
 .header h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #6c5ce7;
   margin: 0;
 }
@@ -99,7 +101,7 @@ body {
   color: #00b894;
 }
 .header h2 {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: #ff7675;
   margin: 10px 0 0;
 }
@@ -108,11 +110,12 @@ body {
   color: white;
   border: none;
   border-radius: 10px;
-  padding: 12px 24px;
-  font-size: 1rem;
+  padding: 10px 20px;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  margin-top: 10px;
 }
 .header #returnButton:hover {
   transform: translateY(-3px);
@@ -124,11 +127,11 @@ body {
 }
 .main-content .intro h3, .main-content .intro h4, .main-content .key-facts h3, .main-content .key-facts h4, .main-content .misconceptions h3, .main-content .misconceptions h4 {
   color: #6c5ce7;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   margin-bottom: 20px;
 }
 .main-content .intro p, .main-content .key-facts p, .main-content .misconceptions p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #444f52;
   line-height: 1.8;
 }
@@ -159,6 +162,31 @@ body {
   border-left: 4px solid #ff7675;
 }
 
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .main-content h3, .main-content h4 {
+    font-size: 1.4rem;
+  }
+}
+@media (max-width: 480px) {
+  .container {
+    width: 80%;
+    padding: 20px;
+  }
+  .header h1 {
+    font-size: 1.8rem;
+  }
+  .header h2 {
+    font-size: 1rem;
+  }
+  .main-content p {
+    font-size: 0.95rem;
+  }
+}
 .login-container {
   background: white;
   padding: 40px;
@@ -208,4 +236,19 @@ body {
 .login-container button:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+}
+@media (max-width: 768px) {
+  .login-container {
+    width: 90%;
+    padding: 30px;
+  }
+}
+@media (max-width: 480px) {
+  .login-container {
+    width: 85%;
+    padding: 20px;
+  }
+  .login-container input {
+    width: 80%;
+  }
 }/*# sourceMappingURL=style.css.map */
