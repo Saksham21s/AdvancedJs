@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Authentication System</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./style/style.css">
+</head>
+<body>
+    <h1>Choose Storage Type</h1>
+    <div class="storage-container">
+        <div class="storage-card" onclick="location.href='localStorage/login.html'">
+            <h2>Local Storage</h2>
+            <p>Persistent data storage</p>
+        </div>
+        <div class="storage-card" onclick="location.href='sessionStorage/login.html'">
+            <h2>Session Storage</h2>
+            <p>Data stored until tab is closed</p>
+        </div>
+        <div class="storage-card" onclick="location.href='#'">
+            <h2>Cookies Storage</h2>
+            <p>Data stored with expiry</p>
+        </div>
+    </div>
+</body>
+</html>

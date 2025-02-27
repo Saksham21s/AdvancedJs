@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Session Storage</title>
+    <link rel="shortcut icon" href="../favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Welcome, <span id="userName">User</span></h1>
+            <h2>Email: <span id="userEmail">Not Found</span></h2>
+            <button id="returnButton">Return to Home</button>
+        </header>
+
+        <main class="main-content">
+            <section class="intro">
+                <h3>📌 Everything About Session Storage</h3>
+                <p>
+                    Session Storage is a web storage API that allows you to store key-value pairs temporarily in a web browser.
+                    Data stored in session storage is available only for the duration of the page session and is cleared when the tab is closed.
+                </p>
+            </section>
+
+            <section class="key-facts">
+                <h4>🛠 Key Facts About Session Storage:</h4>
+                <ul>
+                    <li>Stores data in key-value pairs.</li>
+                    <li>Data is lost when the tab is closed.</li>
+                    <li>Stored data is available only on the same origin (protocol + domain + port).</li>
+                    <li>Storage limit is around 5MB per domain.</li>
+                    <li>Data can be accessed using `sessionStorage.getItem("key")`.</li>
+                    <li>To remove a specific key: `sessionStorage.removeItem("key")`.</li>
+                    <li>To clear all stored data: `sessionStorage.clear()`.</li>
+                </ul>
+            </section>
+
+            <section class="misconceptions">
+                <h4>🚀 Common Misconceptions:</h4>
+                <ul>
+                    <li><b>Session Storage is not permanent</b> - Data is lost when the tab is closed.</li>
+                    <li><b>Session Storage is not shared across tabs</b> - Each tab has its own storage.</li>
+                    <li><b>Session Storage is not suitable for large data</b> - For complex data, use databases.</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let email = sessionStorage.getItem("email") || "Not Provided";
+            let name = email.split("@")[0] || "User";
+
+            document.getElementById("userEmail").innerText = email;
+            document.getElementById("userName").innerText = name;
+
+            if (sessionStorage.getItem("showAlert") === "true") {
+                alert("Welcome to Learn Session Storage Page");
+                sessionStorage.removeItem("showAlert"); 
+            }
+        });
+
+        document.getElementById("returnButton").addEventListener("click", () => {
+            window.location.href = "../index.html";
+        });
+    </script>
+</body>
+</html>
