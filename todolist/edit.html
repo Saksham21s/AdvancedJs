@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit User</title>
+    <link rel="shortcut icon" href="../favicon.png" type="image/x-icon">
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        color: #333;
+      }
+      .edit-container {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        width: 400px;
+        text-align: center;
+      }
+      .edit-container h2 {
+        margin-bottom: 20px;
+      }
+      .edit-container input {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin-bottom: 18px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .edit-container button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .edit-container button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="edit-container">
+      <h2>Edit User</h2>
+      <input type="text" id="editName" placeholder="Name" required />
+      <input type="email" id="editEmail" placeholder="Email" required />
+      <input type="text" id="editPhone" placeholder="Phone" required />
+      <input type="text" id="editUsername" placeholder="Username" required />
+      <button onclick="updateUser()">Update</button>
+    </div>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get("id");
+
+      // Load user details
+      const loadUserDetails = () => {
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const user = users.find((u) => u.id === parseInt(userId));
+        if (user) {
+          document.getElementById("editName").value = user.name;
+          document.getElementById("editEmail").value = user.email;
+          document.getElementById("editPhone").value = user.phone;
+          document.getElementById("editUsername").value = user.username;
+        }
+      };
+
+      // Update user details
+      const updateUser = () => {
+        const name = document.getElementById("editName").value.trim();
+        const email = document.getElementById("editEmail").value.trim();
+        const phone = document.getElementById("editPhone").value.trim();
+        const username = document.getElementById("editUsername").value.trim();
+        if (!name || !email || !phone || !username) {
+          alert("Please fill all fields");
+          return;
+        }
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const userIndex = users.findIndex((u) => u.id === parseInt(userId));
+        if (userIndex !== -1) {
+          users[userIndex] = { ...users[userIndex], name, email, phone, username };
+          localStorage.setItem("users", JSON.stringify(users));
+          window.location.href = "./user-data.html";
+        }
+      };
+
+      // Load user details on page load
+      loadUserDetails();
+    </script>
+  </body>
+</html>

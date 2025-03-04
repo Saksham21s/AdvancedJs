@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Todo List</title>
+    <link rel="shortcut icon" href="../favicon.png" type="image/x-icon" />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        padding: 20px;
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        min-height: 100vh;
+        margin: 0;
+        color: #333;
+      }
+      .form-container,
+      .table-container {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        transition: transform 0.3s ease-in-out;
+      }
+      .form-container:hover,
+      .table-container:hover {
+        transform: translateY(-5px);
+      }
+      .form-container {
+        width: 25%;
+      }
+      .table-container {
+        width: 70%;
+      }
+      .form-container input {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin-bottom: 18px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .form-container button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .form-container button:hover {
+        background-color: #0056b3;
+      }
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .table th,
+      .table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+      .table th {
+        background-color: #007bff;
+        color: #fff;
+      }
+      .action-buttons {
+        display: flex;
+        gap: 8px;
+      }
+      .action-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: background-color 0.3s ease;
+      }
+      .edit-btn {
+        background-color: #f0ad4e;
+        color: white;
+      }
+      .delete-btn {
+        background-color: #d9534f;
+        color: white;
+      }
+      .edit-btn:hover {
+        background-color: #ec971f;
+      }
+      .delete-btn:hover {
+        background-color: #c9302c;
+      }
+      .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #ff6e7f, #bfe9ff);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        color: #333;
+        z-index: 1000;
+      }
+      .popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+      .popup-header h3 {
+        margin: 0;
+      }
+      .popup-header button {
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        color: #333;
+      }
+      .popup-header button:hover {
+        color: #000;
+      }
+      .popup-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+      .popup-buttons button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: background-color 0.3s ease;
+      }
+      .popup-buttons .confirm-btn {
+        background-color: #28a745;
+        color: white;
+      }
+      .popup-buttons .cancel-btn {
+        background-color: #dc3545;
+        color: white;
+      }
+      .popup-buttons .confirm-btn:hover {
+        background-color: #218838;
+      }
+      .popup-buttons .cancel-btn:hover {
+        background-color: #c82333;
+      }
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Add User</h2>
+      <input type="text" id="name" placeholder="Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="text" id="phone" placeholder="Phone" required />
+      <input type="text" id="username" placeholder="Username" required />
+      <button onclick="addUser()">Add User</button>
+    </div>
+    <div class="table-container">
+      <h2>Users Data</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Username</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="userTableBody"></tbody>
+      </table>
+    </div>
+    <!-- Delete Confirmation Popup -->
+    <div id="deletePopup" class="popup hidden">
+      <div class="popup-header">
+        <h3>Confirm Delete</h3>
+        <button onclick="hidePopup('deletePopup')">×</button>
+      </div>
+      <p>Are you sure you want to delete this user?</p>
+      <div class="popup-buttons">
+        <button class="confirm-btn" id="confirmDeleteButton">Yes</button>
+        <button class="cancel-btn" onclick="hidePopup('deletePopup')">
+          No
+        </button>
+      </div>
+    </div>
+    <!-- Edit Confirmation Popup -->
+    <div id="editPopup" class="popup hidden">
+      <div class="popup-header">
+        <h3>Confirm Edit</h3>
+        <button onclick="hidePopup('editPopup')">×</button>
+      </div>
+      <p>Are you sure you want to edit this user?</p>
+      <div class="popup-buttons">
+        <button class="confirm-btn" id="confirmEditButton">Yes</button>
+        <button class="cancel-btn" onclick="hidePopup('editPopup')">No</button>
+      </div>
+    </div>
+    <div id="overlay" class="overlay hidden"></div>
+    <script>
+      let apiUsers = [];
+      let selectedUserId;
+
+      // Fetch random users from API
+      const fetchRandomUsers = async () => {
+        const response = await fetch("https://randomuser.me/api/?results=5");
+        const data = await response.json();
+        apiUsers = data.results.map((user, index) => ({
+          id: index + 1,
+          name: `${user.name.first} ${user.name.last}`,
+          email: user.email,
+          phone: user.phone || "N/A",
+          username: user.login.username,
+        }));
+        renderAllUsers();
+      };
+
+      // Render all users (API + local storage)
+      const renderAllUsers = () => {
+        const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+        const allUsers = [...apiUsers, ...storedUsers];
+        let tbody = "";
+        allUsers.forEach((user, index) => {
+          tbody += `<tr>
+<td>${user.id}</td>
+<td>${user.name}</td>
+<td>${user.email}</td>
+<td>${user.phone}</td>
+<td>${user.username}</td>
+<td>
+${
+  index >= 5
+    ? `<div class="action-buttons">
+<button class="action-btn edit-btn" onclick="showEditPopup(${user.id})">Edit</button>
+<button class="action-btn delete-btn" onclick="showDeletePopup(${user.id})">Delete</button>
+</div>`
+    : ""
+}
+</td>
+</tr>`;
+        });
+        document.getElementById("userTableBody").innerHTML = tbody;
+      };
+
+      // Add a new user
+      const addUser = () => {
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const username = document.getElementById("username").value.trim();
+        if (!name || !email || !phone || !username) {
+          alert("Please fill all fields");
+          return;
+        }
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const newUserId = users.length + apiUsers.length + 1;
+        users.push({ id: newUserId, name, email, phone, username });
+        localStorage.setItem("users", JSON.stringify(users));
+        renderAllUsers();
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("username").value = "";
+      };
+
+      // Show delete popup
+      const showDeletePopup = (id) => {
+        selectedUserId = id;
+        document.getElementById("deletePopup").classList.remove("hidden");
+        document.getElementById("overlay").classList.remove("hidden");
+        document.getElementById("confirmDeleteButton").onclick = () => {
+          deleteUser(selectedUserId);
+          hidePopup("deletePopup");
+        };
+      };
+
+      // Show edit popup
+      const showEditPopup = (id) => {
+        selectedUserId = id;
+        document.getElementById("editPopup").classList.remove("hidden");
+        document.getElementById("overlay").classList.remove("hidden");
+        document.getElementById("confirmEditButton").onclick = () => {
+          window.location.href = `edit.html?id=${selectedUserId}`;
+        };
+      };
+
+      // Hide popup
+      const hidePopup = (popupId) => {
+        document.getElementById(popupId).classList.add("hidden");
+        document.getElementById("overlay").classList.add("hidden");
+      };
+
+      // Delete a user
+      const deleteUser = (id) => {
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        users = users.filter((user) => user.id !== id);
+        localStorage.setItem("users", JSON.stringify(users));
+        renderAllUsers();
+      };
+
+      // Fetch random users on page load
+      fetchRandomUsers();
+    </script>
+  </body>
+</html>
